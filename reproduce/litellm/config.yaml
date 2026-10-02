@@ -1,0 +1,22 @@
+# LiteLLM proxy config for the CyberGym-E2E Codex arm (gpt-5).
+#
+# run_agent.py passes --litellm-model-id gpt-5; litellm routes it to openai/gpt-5
+# and meters spend against the per-task budget key using the prices below.
+# Prices come from env (see docker-compose.yml / .env) so they can be set to the
+# current OpenAI gpt-5 pricing without editing this file.
+# Pinned to the dated snapshot gpt-5-2025-08-07 (NOT the floating `gpt-5` alias),
+# so the backbone cannot drift between reproductions.
+model_list:
+  - model_name: gpt-5-2025-08-07
+    litellm_params:
+      model: openai/gpt-5-2025-08-07
+      api_key: os.environ/OPENAI_API_KEY
+      input_cost_per_token: os.environ/GPT5_INPUT_COST_PER_TOKEN
+      output_cost_per_token: os.environ/GPT5_OUTPUT_COST_PER_TOKEN
+
+litellm_settings:
+  drop_params: true
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/DATABASE_URL
